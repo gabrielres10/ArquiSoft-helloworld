@@ -10,12 +10,14 @@ import java.util.List;
 
 public class PrinterI implements Demo.Printer {
 
+  public void newClient(com.zeroc.Ice.Current current){
+    //new client connected
+    Server.incrementClientCount();
+  }
+
   public String printString(String msg, com.zeroc.Ice.Current current) {
     String clientHN = msg.split("-")[1];
     msg = msg.split("-")[0];
-
-    //new client connected
-    Server.incrementClientCount();
 
     System.out.println("[MENSAJE] - " + clientHN + ": " + msg + "\n");
 

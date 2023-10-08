@@ -17,7 +17,7 @@ public class Server {
     // Método para incrementar el contador de clientes conectados
     public static synchronized void incrementClientCount() {
         clientCount++;
-        System.out.println("Client connected. Total: " + clientCount);
+        //System.out.println("Client connected. Total: " + clientCount);
     }
 
     // Método para obtener el número actual de clientes conectados

@@ -19,6 +19,8 @@ public interface Printer extends com.zeroc.Ice.Object
 {
     String printString(String s, com.zeroc.Ice.Current current);
 
+    void newClient(com.zeroc.Ice.Current current);
+
     /** @hidden */
     static final String[] _iceIds =
     {
@@ -64,6 +66,21 @@ public interface Printer extends com.zeroc.Ice.Object
         return inS.setResult(ostr);
     }
 
+    /**
+     * @hidden
+     * @param obj -
+     * @param inS -
+     * @param current -
+     * @return -
+    **/
+    static java.util.concurrent.CompletionStage<com.zeroc.Ice.OutputStream> _iceD_newClient(Printer obj, final com.zeroc.IceInternal.Incoming inS, com.zeroc.Ice.Current current)
+    {
+        com.zeroc.Ice.Object._iceCheckMode(null, current.mode);
+        inS.readEmptyParams();
+        obj.newClient(current);
+        return inS.setResult(inS.writeEmptyParams());
+    }
+
     /** @hidden */
     final static String[] _iceOps =
     {
@@ -71,6 +88,7 @@ public interface Printer extends com.zeroc.Ice.Object
         "ice_ids",
         "ice_isA",
         "ice_ping",
+        "newClient",
         "printString"
     };
 
@@ -104,6 +122,10 @@ public interface Printer extends com.zeroc.Ice.Object
                 return com.zeroc.Ice.Object._iceD_ice_ping(this, in, current);
             }
             case 4:
+            {
+                return _iceD_newClient(this, in, current);
+            }
+            case 5:
             {
                 return _iceD_printString(this, in, current);
             }

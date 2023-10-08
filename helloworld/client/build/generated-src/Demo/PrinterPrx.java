@@ -57,6 +57,39 @@ public interface PrinterPrx extends com.zeroc.Ice.ObjectPrx
         return f;
     }
 
+    default void newClient()
+    {
+        newClient(com.zeroc.Ice.ObjectPrx.noExplicitContext);
+    }
+
+    default void newClient(java.util.Map<String, String> context)
+    {
+        _iceI_newClientAsync(context, true).waitForResponse();
+    }
+
+    default java.util.concurrent.CompletableFuture<Void> newClientAsync()
+    {
+        return _iceI_newClientAsync(com.zeroc.Ice.ObjectPrx.noExplicitContext, false);
+    }
+
+    default java.util.concurrent.CompletableFuture<Void> newClientAsync(java.util.Map<String, String> context)
+    {
+        return _iceI_newClientAsync(context, false);
+    }
+
+    /**
+     * @hidden
+     * @param context -
+     * @param sync -
+     * @return -
+     **/
+    default com.zeroc.IceInternal.OutgoingAsync<Void> _iceI_newClientAsync(java.util.Map<String, String> context, boolean sync)
+    {
+        com.zeroc.IceInternal.OutgoingAsync<Void> f = new com.zeroc.IceInternal.OutgoingAsync<>(this, "newClient", null, sync, null);
+        f.invoke(false, context, null, null, null);
+        return f;
+    }
+
     /**
      * Contacts the remote server to verify that the object implements this type.
      * Raises a local exception if a communication error occurs.

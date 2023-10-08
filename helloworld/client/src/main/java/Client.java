@@ -20,6 +20,7 @@ public class Client{
 			
 
 				try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
+					printerPrx.newClient();
 
 					String userInput = "Default text";
 
