@@ -5,7 +5,7 @@ Demo/_PrinterPrxI.java
  Demo._PrinterPrxI
 PrinterI.java
  PrinterI
-Demo/PrinterPrx.java
- Demo.PrinterPrx
 Server.java
  Server
+Demo/PrinterPrx.java
+ Demo.PrinterPrx
