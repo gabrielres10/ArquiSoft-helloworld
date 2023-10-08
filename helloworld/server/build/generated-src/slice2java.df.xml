@@ -1,0 +1,12 @@
+<state>
+  <timestamp value='1696780170246' />
+  <sourceSet name='default'>
+    <source name='/home/swarch/Desktop/A00377741/ArquiSoft-helloworld/helloworld/Printer.ice'>
+      <file name='/home/swarch/Desktop/A00377741/ArquiSoft-helloworld/helloworld/server/build/generated-src/Demo/Printer.java' />
+      <file name='/home/swarch/Desktop/A00377741/ArquiSoft-helloworld/helloworld/server/build/generated-src/Demo/PrinterPrx.java' />
+      <file name='/home/swarch/Desktop/A00377741/ArquiSoft-helloworld/helloworld/server/build/generated-src/Demo/_PrinterPrxI.java' />
+    </source>
+    <arg value='/opt/Ice-3.7.6/bin/slice2java' />
+    <arg value='-I/opt/Ice-3.7.6/slice' />
+  </sourceSet>
+</state>

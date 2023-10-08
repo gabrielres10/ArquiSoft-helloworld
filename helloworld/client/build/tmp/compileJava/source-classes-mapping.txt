@@ -1,0 +1,9 @@
+Demo/_PrinterPrxI.java
+ Demo._PrinterPrxI
+Demo/Printer.java
+ Demo.Printer
+ Demo.Printer$1
+Demo/PrinterPrx.java
+ Demo.PrinterPrx
+Client.java
+ Client
