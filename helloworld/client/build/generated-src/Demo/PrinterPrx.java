@@ -90,6 +90,39 @@ public interface PrinterPrx extends com.zeroc.Ice.ObjectPrx
         return f;
     }
 
+    default void disconnectClient()
+    {
+        disconnectClient(com.zeroc.Ice.ObjectPrx.noExplicitContext);
+    }
+
+    default void disconnectClient(java.util.Map<String, String> context)
+    {
+        _iceI_disconnectClientAsync(context, true).waitForResponse();
+    }
+
+    default java.util.concurrent.CompletableFuture<Void> disconnectClientAsync()
+    {
+        return _iceI_disconnectClientAsync(com.zeroc.Ice.ObjectPrx.noExplicitContext, false);
+    }
+
+    default java.util.concurrent.CompletableFuture<Void> disconnectClientAsync(java.util.Map<String, String> context)
+    {
+        return _iceI_disconnectClientAsync(context, false);
+    }
+
+    /**
+     * @hidden
+     * @param context -
+     * @param sync -
+     * @return -
+     **/
+    default com.zeroc.IceInternal.OutgoingAsync<Void> _iceI_disconnectClientAsync(java.util.Map<String, String> context, boolean sync)
+    {
+        com.zeroc.IceInternal.OutgoingAsync<Void> f = new com.zeroc.IceInternal.OutgoingAsync<>(this, "disconnectClient", null, sync, null);
+        f.invoke(false, context, null, null, null);
+        return f;
+    }
+
     /**
      * Contacts the remote server to verify that the object implements this type.
      * Raises a local exception if a communication error occurs.

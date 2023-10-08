@@ -45,6 +45,8 @@ public class Client{
 
 					}
 
+					printerPrx.disconnectClient();
+
 				} catch (Exception e) {
 
 					e.printStackTrace();

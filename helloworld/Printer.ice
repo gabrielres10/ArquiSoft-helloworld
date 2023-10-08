@@ -4,6 +4,7 @@ module Demo
     {
         string printString(string s);
         void newClient();
+        void disconnectClient();
     }
 
 

@@ -7,10 +7,20 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class PrinterI implements Demo.Printer {
 
-  public void newClient(com.zeroc.Ice.Current current){
+  private ExecutorService threadPool = Executors.newCachedThreadPool();
+
+  public void disconnectClient(com.zeroc.Ice.Current current) {
+    //new client connected
+    Server.decrementClientCount();
+  }
+
+  public void newClient(com.zeroc.Ice.Current current) {
     //new client connected
     Server.incrementClientCount();
   }
@@ -19,18 +29,19 @@ public class PrinterI implements Demo.Printer {
     String clientHN = msg.split("-")[1];
     msg = msg.split("-")[0];
 
+    final String finalMsg = msg;
+    final String finalClientHN = clientHN;
+
     System.out.println("[MENSAJE] - " + clientHN + ": " + msg + "\n");
 
+    Future<String> resultFuture = threadPool.submit(() ->
+      manageRequest(finalMsg, finalClientHN)
+    );
     try {
-      int num = Integer.parseInt(msg);
-      if (num > 0) {
-        System.out.println("Consulta hecha por " + clientHN + ":\n");
-        return printPrimes(num);
-      } else {
-        return msg + " no es un número positivo! Prueba otros comandos que sean válidos \n";
-      }
-    } catch (NumberFormatException e) {
-      return manageRequest(msg, clientHN);
+      return resultFuture.get(); // Espera hasta que la solicitud se haya procesado y obtiene el resultado
+    } catch (Exception exception) {
+      exception.printStackTrace();
+      return "Error al procesar la solicitud";
     }
   }
 
@@ -39,25 +50,34 @@ public class PrinterI implements Demo.Printer {
     if (msg.startsWith("!")) {
       command = msg.split("!")[1];
       System.out.println("Consulta hecha por " + hostName + ":\n");
-      return executeCommand(command);
+      return executeCommand(command); //return !custom command
     } else {
-      switch (msg.split(" ")[0].toLowerCase()) {
-        case "listifs":
+      try {
+        int num = Integer.parseInt(msg);
+        if (num > 0) {
           System.out.println("Consulta hecha por " + hostName + ":\n");
-          command = "ifconfig";
-          return executeCommand(command);
-          
-        case "listports":
-          System.out.println("Consulta hecha por " + hostName + ":\n");
-          command = "nmap " + msg.split(" ")[1];
-          return executeCommand(command);
-          
-        case "exit":
-          return ("Bye bye, " + hostName + "!");
-          
-        default:
-          return ("Por favor ingresa un comando válido");
-          
+          return printPrimes(num); //return prime number
+        } else {
+          return (
+            msg +
+            " no es un número positivo! Prueba otros comandos que sean válidos \n"
+          );
+        }
+      } catch (NumberFormatException e) {
+        switch (msg.split(" ")[0].toLowerCase()) {
+          case "listifs":
+            System.out.println("Consulta hecha por " + hostName + ":\n");
+            command = "ifconfig";
+            return executeCommand(command);
+          case "listports":
+            System.out.println("Consulta hecha por " + hostName + ":\n");
+            command = "nmap " + msg.split(" ")[1];
+            return executeCommand(command);
+          case "exit":
+            return ("Bye bye, " + hostName + "!");
+          default:
+            return ("Por favor ingresa un comando válido");
+        }
       }
     }
   }
@@ -79,8 +99,9 @@ public class PrinterI implements Demo.Printer {
       }
 
       int exitCode = process.waitFor();
-      
-      output = output + "El comando ha terminado con código de salida: " + exitCode;
+
+      output =
+        output + "El comando ha terminado con código de salida: " + exitCode;
     } catch (IOException | InterruptedException e) {
       e.printStackTrace();
       return "No fue posible ejecutar el comando";

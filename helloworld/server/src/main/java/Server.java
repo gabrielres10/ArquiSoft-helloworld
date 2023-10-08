@@ -20,8 +20,14 @@ public class Server {
         //System.out.println("Client connected. Total: " + clientCount);
     }
 
+    public static synchronized void decrementClientCount() {
+        clientCount--;
+        System.out.println("Client disconnected. Total clients: " + clientCount);
+    }
+
     // Método para obtener el número actual de clientes conectados
     public static synchronized int getClientCount() {
         return clientCount;
     }
+    
 }
