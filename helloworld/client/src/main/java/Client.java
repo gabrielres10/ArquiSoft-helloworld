@@ -8,9 +8,13 @@ import java.io.*;
 public class Client{
 	public static void main(String[] args){
 		try (Communicator communicator = Util.initialize(args, "client.cfg")){
-
-			PrinterPrx printerPrx = PrinterPrx.checkedCast(communicator.propertyToProxy("Printer.Proxy"));
-
+			
+			try{
+				PrinterPrx printerPrx = PrinterPrx.checkedCast(communicator.propertyToProxy("Printer.Proxy"));
+			} catch (com.zeroc.Ice.ConnectionTimeoutException e){
+				System.out.println("-------[WARNIG]------- \n Timeout!");
+				e.printStackTrace();
+			}
 
 			if (printerPrx == null){
 
