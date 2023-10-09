@@ -32,7 +32,7 @@ public class Client{
 					// Obtener el hostname del cliente
 					String hostname = InetAddress.getLocalHost().getHostName();
 					hostname = whoami() + "@" + hostname;
-					printerPrx.registerClient(hostname, receiver);
+					printerPrx.registerClient(hostname, receiver); // registro de cliente
 					
 					String userInput = "Default text";
 
