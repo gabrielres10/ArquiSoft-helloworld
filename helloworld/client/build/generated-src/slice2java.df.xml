@@ -1,8 +1,11 @@
 <state>
-  <timestamp value='1696807323651' />
+  <timestamp value='1696851589307' />
   <sourceSet name='default'>
     <source name='/home/swarch/Desktop/A00377741/ArquiSoft-helloworld/helloworld/Printer.ice'>
+      <file name='/home/swarch/Desktop/A00377741/ArquiSoft-helloworld/helloworld/client/build/generated-src/Demo/CallbackReceiver.java' />
       <file name='/home/swarch/Desktop/A00377741/ArquiSoft-helloworld/helloworld/client/build/generated-src/Demo/Printer.java' />
+      <file name='/home/swarch/Desktop/A00377741/ArquiSoft-helloworld/helloworld/client/build/generated-src/Demo/CallbackReceiverPrx.java' />
+      <file name='/home/swarch/Desktop/A00377741/ArquiSoft-helloworld/helloworld/client/build/generated-src/Demo/_CallbackReceiverPrxI.java' />
       <file name='/home/swarch/Desktop/A00377741/ArquiSoft-helloworld/helloworld/client/build/generated-src/Demo/PrinterPrx.java' />
       <file name='/home/swarch/Desktop/A00377741/ArquiSoft-helloworld/helloworld/client/build/generated-src/Demo/_PrinterPrxI.java' />
     </source>

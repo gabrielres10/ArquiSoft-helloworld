@@ -1,6 +1,6 @@
 import com.zeroc.Ice.Communicator;
 import com.zeroc.Ice.Util;
-import Demo.PrinterPrx;
+import Demo.*;
 import java.net.InetAddress;
 
 import java.io.*;
@@ -11,27 +11,38 @@ public class Client{
 			
 			try{
 				PrinterPrx printerPrx = PrinterPrx.checkedCast(communicator.propertyToProxy("Printer.Proxy"));
-
+				
 				if (printerPrx == null){
 
 					throw new Error("Invalid proxy");
-
 				}
-			
+
+				com.zeroc.Ice.ObjectAdapter adapter = communicator.createObjectAdapter("Callback.Client");
+				adapter.add(new CallbackReceiverI(), com.zeroc.Ice.Util.stringToIdentity("callbackReceiver"));
+				adapter.activate();
+
+
+				CallbackReceiverPrx receiver =
+				CallbackReceiverPrx.uncheckedCast(adapter.createProxy(
+                com.zeroc.Ice.Util.stringToIdentity("callbackReceiver")));
 
 				try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
-					printerPrx.newClient();
 
+					// Obtener el hostname del cliente
+					String hostname = InetAddress.getLocalHost().getHostName();
+					hostname = whoami() + "@" + hostname;
+					printerPrx.registerClient(hostname, receiver);
+					
 					String userInput = "Default text";
 
 					System.out.print("Enter a message (type 'exit' to quit): ");
 
 					while ((userInput = reader.readLine()) != null) {
-
-						// Obtener el hostname del cliente
-							String hostname = InetAddress.getLocalHost().getHostName();
-							
-						String result = printerPrx.printString(userInput+"-"+whoami() + "@" + hostname);
+						/*
+						if (userInput.equalsIgnoreCase("callback")){
+							printerPrx.initiateCallback(receiver);
+						}*/
+						String result = printerPrx.printString(userInput+"-"+hostname);
 
 						System.out.println(result);
 
@@ -45,7 +56,7 @@ public class Client{
 
 					}
 
-					printerPrx.disconnectClient();
+					printerPrx.unregisterClient(hostname);
 
 				} catch (Exception e) {
 

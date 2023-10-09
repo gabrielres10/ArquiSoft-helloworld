@@ -17,11 +17,15 @@ package Demo;
 
 public interface Printer extends com.zeroc.Ice.Object
 {
-    String printString(String s, com.zeroc.Ice.Current current);
+    String printString(String msg, com.zeroc.Ice.Current current);
 
-    void newClient(com.zeroc.Ice.Current current);
+    void registerClient(String hostname, CallbackReceiverPrx proxy, com.zeroc.Ice.Current current);
 
-    void disconnectClient(com.zeroc.Ice.Current current);
+    void unregisterClient(String hostname, com.zeroc.Ice.Current current);
+
+    void initiateCallback(CallbackReceiverPrx proxy, String msg, com.zeroc.Ice.Current current);
+
+    void shutdown(com.zeroc.Ice.Current current);
 
     /** @hidden */
     static final String[] _iceIds =
@@ -58,10 +62,10 @@ public interface Printer extends com.zeroc.Ice.Object
     {
         com.zeroc.Ice.Object._iceCheckMode(null, current.mode);
         com.zeroc.Ice.InputStream istr = inS.startReadParams();
-        String iceP_s;
-        iceP_s = istr.readString();
+        String iceP_msg;
+        iceP_msg = istr.readString();
         inS.endReadParams();
-        String ret = obj.printString(iceP_s, current);
+        String ret = obj.printString(iceP_msg, current);
         com.zeroc.Ice.OutputStream ostr = inS.startWriteParams();
         ostr.writeString(ret);
         inS.endWriteParams(ostr);
@@ -75,11 +79,16 @@ public interface Printer extends com.zeroc.Ice.Object
      * @param current -
      * @return -
     **/
-    static java.util.concurrent.CompletionStage<com.zeroc.Ice.OutputStream> _iceD_newClient(Printer obj, final com.zeroc.IceInternal.Incoming inS, com.zeroc.Ice.Current current)
+    static java.util.concurrent.CompletionStage<com.zeroc.Ice.OutputStream> _iceD_registerClient(Printer obj, final com.zeroc.IceInternal.Incoming inS, com.zeroc.Ice.Current current)
     {
         com.zeroc.Ice.Object._iceCheckMode(null, current.mode);
-        inS.readEmptyParams();
-        obj.newClient(current);
+        com.zeroc.Ice.InputStream istr = inS.startReadParams();
+        String iceP_hostname;
+        CallbackReceiverPrx iceP_proxy;
+        iceP_hostname = istr.readString();
+        iceP_proxy = CallbackReceiverPrx.uncheckedCast(istr.readProxy());
+        inS.endReadParams();
+        obj.registerClient(iceP_hostname, iceP_proxy, current);
         return inS.setResult(inS.writeEmptyParams());
     }
 
@@ -90,24 +99,64 @@ public interface Printer extends com.zeroc.Ice.Object
      * @param current -
      * @return -
     **/
-    static java.util.concurrent.CompletionStage<com.zeroc.Ice.OutputStream> _iceD_disconnectClient(Printer obj, final com.zeroc.IceInternal.Incoming inS, com.zeroc.Ice.Current current)
+    static java.util.concurrent.CompletionStage<com.zeroc.Ice.OutputStream> _iceD_unregisterClient(Printer obj, final com.zeroc.IceInternal.Incoming inS, com.zeroc.Ice.Current current)
+    {
+        com.zeroc.Ice.Object._iceCheckMode(null, current.mode);
+        com.zeroc.Ice.InputStream istr = inS.startReadParams();
+        String iceP_hostname;
+        iceP_hostname = istr.readString();
+        inS.endReadParams();
+        obj.unregisterClient(iceP_hostname, current);
+        return inS.setResult(inS.writeEmptyParams());
+    }
+
+    /**
+     * @hidden
+     * @param obj -
+     * @param inS -
+     * @param current -
+     * @return -
+    **/
+    static java.util.concurrent.CompletionStage<com.zeroc.Ice.OutputStream> _iceD_initiateCallback(Printer obj, final com.zeroc.IceInternal.Incoming inS, com.zeroc.Ice.Current current)
+    {
+        com.zeroc.Ice.Object._iceCheckMode(null, current.mode);
+        com.zeroc.Ice.InputStream istr = inS.startReadParams();
+        CallbackReceiverPrx iceP_proxy;
+        String iceP_msg;
+        iceP_proxy = CallbackReceiverPrx.uncheckedCast(istr.readProxy());
+        iceP_msg = istr.readString();
+        inS.endReadParams();
+        obj.initiateCallback(iceP_proxy, iceP_msg, current);
+        return inS.setResult(inS.writeEmptyParams());
+    }
+
+    /**
+     * @hidden
+     * @param obj -
+     * @param inS -
+     * @param current -
+     * @return -
+    **/
+    static java.util.concurrent.CompletionStage<com.zeroc.Ice.OutputStream> _iceD_shutdown(Printer obj, final com.zeroc.IceInternal.Incoming inS, com.zeroc.Ice.Current current)
     {
         com.zeroc.Ice.Object._iceCheckMode(null, current.mode);
         inS.readEmptyParams();
-        obj.disconnectClient(current);
+        obj.shutdown(current);
         return inS.setResult(inS.writeEmptyParams());
     }
 
     /** @hidden */
     final static String[] _iceOps =
     {
-        "disconnectClient",
         "ice_id",
         "ice_ids",
         "ice_isA",
         "ice_ping",
-        "newClient",
-        "printString"
+        "initiateCallback",
+        "printString",
+        "registerClient",
+        "shutdown",
+        "unregisterClient"
     };
 
     /** @hidden */
@@ -125,31 +174,39 @@ public interface Printer extends com.zeroc.Ice.Object
         {
             case 0:
             {
-                return _iceD_disconnectClient(this, in, current);
+                return com.zeroc.Ice.Object._iceD_ice_id(this, in, current);
             }
             case 1:
             {
-                return com.zeroc.Ice.Object._iceD_ice_id(this, in, current);
+                return com.zeroc.Ice.Object._iceD_ice_ids(this, in, current);
             }
             case 2:
             {
-                return com.zeroc.Ice.Object._iceD_ice_ids(this, in, current);
+                return com.zeroc.Ice.Object._iceD_ice_isA(this, in, current);
             }
             case 3:
             {
-                return com.zeroc.Ice.Object._iceD_ice_isA(this, in, current);
+                return com.zeroc.Ice.Object._iceD_ice_ping(this, in, current);
             }
             case 4:
             {
-                return com.zeroc.Ice.Object._iceD_ice_ping(this, in, current);
+                return _iceD_initiateCallback(this, in, current);
             }
             case 5:
             {
-                return _iceD_newClient(this, in, current);
+                return _iceD_printString(this, in, current);
             }
             case 6:
             {
-                return _iceD_printString(this, in, current);
+                return _iceD_registerClient(this, in, current);
+            }
+            case 7:
+            {
+                return _iceD_shutdown(this, in, current);
+            }
+            case 8:
+            {
+                return _iceD_unregisterClient(this, in, current);
             }
         }
 

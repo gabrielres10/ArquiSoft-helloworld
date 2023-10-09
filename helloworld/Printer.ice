@@ -1,11 +1,15 @@
-module Demo
-{
-    interface Printer
+module Demo {
+
+    interface CallbackReceiver
     {
-        string printString(string s);
-        void newClient();
-        void disconnectClient();
+        void callback(string msg);
     }
-
-
+    interface Printer {
+        string printString(string msg);
+        void registerClient(string hostname, CallbackReceiver* proxy);
+        void unregisterClient(string hostname);
+        void initiateCallback(CallbackReceiver* proxy, string msg);
+        void shutdown();
+    }
+    
 }

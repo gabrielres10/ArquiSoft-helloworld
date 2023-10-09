@@ -10,19 +10,41 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import Demo.*;
 
-public class PrinterI implements Demo.Printer {
+public class PrinterI implements Demo.Printer{
 
   private ExecutorService threadPool = Executors.newCachedThreadPool();
 
-  public void disconnectClient(com.zeroc.Ice.Current current) {
+  @Override
+  public void unregisterClient(String hostName, com.zeroc.Ice.Current current) {
     //new client connected
-    Server.decrementClientCount();
+    Server.unregisterClient(hostName);
   }
 
-  public void newClient(com.zeroc.Ice.Current current) {
+  @Override
+  public void registerClient(String hostName, CallbackReceiverPrx callback, com.zeroc.Ice.Current current) {
     //new client connected
-    Server.incrementClientCount();
+    Server.registerClient(hostName, callback);
+  }
+
+  @Override
+  public void initiateCallback(CallbackReceiverPrx proxy, String msg, com.zeroc.Ice.Current current) {
+    try {
+      proxy.callback(msg);
+    } catch (com.zeroc.Ice.LocalException ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  @Override
+  public void shutdown(com.zeroc.Ice.Current current) {
+    System.out.println("Shutting down...");
+    try {
+      current.adapter.getCommunicator().shutdown();
+    } catch (com.zeroc.Ice.LocalException ex) {
+      ex.printStackTrace();
+    }
   }
 
   public String printString(String msg, com.zeroc.Ice.Current current) {
@@ -35,7 +57,7 @@ public class PrinterI implements Demo.Printer {
     System.out.println("[MENSAJE] - " + clientHN + ": " + msg + "\n");
 
     Future<String> resultFuture = threadPool.submit(() ->
-      manageRequest(finalMsg, finalClientHN)
+      manageRequest(finalMsg, finalClientHN, current)
     );
     try {
       return resultFuture.get(); // Espera hasta que la solicitud se haya procesado y obtiene el resultado
@@ -45,7 +67,7 @@ public class PrinterI implements Demo.Printer {
     }
   }
 
-  private String manageRequest(String msg, String hostName) {
+  private String manageRequest(String msg, String hostName, com.zeroc.Ice.Current current) {
     String command = "";
     if (msg.startsWith("!")) {
       command = msg.split("!")[1];
@@ -75,6 +97,18 @@ public class PrinterI implements Demo.Printer {
             return executeCommand(command);
           case "exit":
             return ("Bye bye, " + hostName + "!");
+          case "list":
+            if (msg.split(" ")[1].equalsIgnoreCase("clients"))
+              return Server.getAllClients();
+          case "to":
+            if(msg.split(" ").length > 1){
+              CallbackReceiverPrx destination = Server.getClient(msg.split(" ")[1]);
+              if(destination != null && msg.split(" ").length > 2){
+                String message = hostName + msg.split(" ")[2];
+                initiateCallback(destination, msg, current);
+              }
+            }
+              
           default:
             return ("Por favor ingresa un comando válido");
         }
