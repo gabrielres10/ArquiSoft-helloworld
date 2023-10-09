@@ -40,12 +40,16 @@ public class Server {
 
    
     public static synchronized CallbackReceiverPrx getClient(String hostname) {
+        System.out.println("Por lo menos entra");
         String key = null;
-        for (Map.Entry<String, CallbackReceiverPrx> entry : registeredClients.entrySet()) {
-            String clientHostName = entry.getKey();
-            if(clientHostName.contains(hostname))
-                key = clientHostName;
+        List<String> keysList = new ArrayList<>(registeredClients.keySet());
+        for (String element : keysList) {
+            // Agregar el elemento actual a la cadena resultante
+            if(element.contains(hostname)){
+                System.out.println("Se ha encontrado a " + element);
+                key = element;
                 break;
+            }
         }
         if(key != null)
             return registeredClients.get(key);
