@@ -11,8 +11,8 @@ CallbackReceiverI.java
  CallbackReceiverI
 Demo/PrinterPrx.java
  Demo.PrinterPrx
-Client.java
- Client
 Demo/CallbackReceiver.java
  Demo.CallbackReceiver
  Demo.CallbackReceiver$1
+Client.java
+ Client

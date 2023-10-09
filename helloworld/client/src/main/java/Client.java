@@ -18,7 +18,8 @@ public class Client{
 				}
 
 				com.zeroc.Ice.ObjectAdapter adapter = communicator.createObjectAdapter("Callback.Client");
-				adapter.add(new CallbackReceiverI(), com.zeroc.Ice.Util.stringToIdentity("callbackReceiver"));
+				com.zeroc.Ice.Object object = new CallbackReceiverI();
+				adapter.add(object, com.zeroc.Ice.Util.stringToIdentity("callbackReceiver"));
 				adapter.activate();
 
 

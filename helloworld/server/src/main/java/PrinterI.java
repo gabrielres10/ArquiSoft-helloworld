@@ -12,7 +12,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import Demo.*;
 
-public class PrinterI implements Demo.Printer{
+public class PrinterI implements Printer{
 
   private ExecutorService threadPool = Executors.newCachedThreadPool();
 
