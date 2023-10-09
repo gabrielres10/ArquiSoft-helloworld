@@ -56,7 +56,7 @@ public class Server {
         String output = "";
         for (Map.Entry<String, CallbackReceiverPrx> entry : registeredClients.entrySet()) {
             String clientHostName = entry.getKey();
-            output+=clientHostName;
+            output+=clientHostName + "\n";
             // Puedes mostrar más detalles del cliente si es necesario
             // Por ejemplo, puedes llamar a métodos en el cliente para obtener información adicional
         }
