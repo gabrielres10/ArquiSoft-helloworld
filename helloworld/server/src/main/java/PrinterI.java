@@ -1,3 +1,4 @@
+import Demo.*;
 import com.zeroc.Ice.Current;
 import java.io.*;
 import java.io.BufferedReader;
@@ -10,9 +11,8 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import Demo.*;
 
-public class PrinterI implements Printer{
+public class PrinterI implements Printer {
 
   private ExecutorService threadPool = Executors.newCachedThreadPool();
 
@@ -23,13 +23,21 @@ public class PrinterI implements Printer{
   }
 
   @Override
-  public void registerClient(String hostName, CallbackReceiverPrx callback, com.zeroc.Ice.Current current) {
+  public void registerClient(
+    String hostName,
+    CallbackReceiverPrx callback,
+    com.zeroc.Ice.Current current
+  ) {
     //new client connected
     Server.registerClient(hostName, callback);
   }
 
   @Override
-  public void initiateCallback(CallbackReceiverPrx proxy, String msg, com.zeroc.Ice.Current current) {
+  public void initiateCallback(
+    CallbackReceiverPrx proxy,
+    String msg,
+    com.zeroc.Ice.Current current
+  ) {
     try {
       proxy.callback(msg);
     } catch (com.zeroc.Ice.LocalException ex) {
@@ -67,7 +75,11 @@ public class PrinterI implements Printer{
     }
   }
 
-  private String manageRequest(String msg, String hostName, com.zeroc.Ice.Current current) {
+  private String manageRequest(
+    String msg,
+    String hostName,
+    com.zeroc.Ice.Current current
+  ) {
     String command = "";
     if (msg.startsWith("!")) {
       command = msg.split("!")[1];
@@ -98,18 +110,36 @@ public class PrinterI implements Printer{
           case "exit":
             return ("Bye bye, " + hostName + "!");
           case "list":
-            if (msg.split(" ")[1].equalsIgnoreCase("clients"))
-              return Server.getAllClients();
+            if (
+              msg.split(" ")[1].equalsIgnoreCase("clients")
+            ) return Server.getAllClients();
           case "to":
-            if(msg.split(" ").length > 1){
-              CallbackReceiverPrx destination = Server.getClient(msg.split(" ")[1]);
-              if(destination != null && msg.split(" ").length > 2){
-                String message = hostName + msg.split(" ")[2];
-                initiateCallback(destination, msg, current);
+            CallbackReceiverPrx destination = null;
+            if (msg.split(" ").length > 1) {
+              System.out.println(msg.split(":").length);
+              destination =
+                Server.getClient(msg.split(" ")[1].replace(":", ""));
+              System.out.println(destination);
+              if (destination != null && msg.split(":").length == 2) {
+                String message = hostName + ": " + msg.split(":")[1];
+                initiateCallback(destination, message, current);
               }
             }
-              
+            return (destination == null || msg.split(":").length != 2)
+              ? "Tu mensaje debe ser similar a \"to X:\" donde el mensaje irá después de :"
+              : "";
           default:
+            if(msg.startsWith("BC")){
+              if (msg.split(":").length > 1) {
+                String message = msg.split(":")[1];
+                for (CallbackReceiverPrx callback : Server.getCallbacks()) {
+                  initiateCallback(callback, message, current);
+                }
+              }
+              return (msg.split(":").length < 1 || (msg.split(":").length < 1 && msg.split(" ").length > 1))
+                ? "Debes ingresar un mensaje después de BC: (recuerda separar el mensaje con \":\")"
+                : "";
+              }
             return ("Por favor ingresa un comando válido");
         }
       }

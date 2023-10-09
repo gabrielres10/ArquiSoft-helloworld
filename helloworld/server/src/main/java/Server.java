@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 import Demo.*;
@@ -19,11 +21,10 @@ public class Server {
     }
 
 
-    // Método para incrementar el contador de clientes conectados
     public static synchronized void registerClient(String hostname, CallbackReceiverPrx callback) {
         registeredClients.put(hostname, callback);
         clientCount++;
-        //System.out.println("Client connected. Total: " + clientCount);
+        System.out.println("Client connected. Total: " + clientCount);
     }
 
     public static synchronized void unregisterClient(String hostname) {
@@ -32,12 +33,12 @@ public class Server {
         System.out.println("Client disconnected. Total clients: " + clientCount);
     }
 
-    // Método para obtener el número actual de clientes conectados
+    
     public static synchronized int getClientCount() {
         return clientCount;
     }
 
-    // Método para obtener un cliente registrado por su hostname
+   
     public static synchronized CallbackReceiverPrx getClient(String hostname) {
         String key = null;
         for (Map.Entry<String, CallbackReceiverPrx> entry : registeredClients.entrySet()) {
@@ -53,14 +54,20 @@ public class Server {
     }
 
     public static synchronized String getAllClients(){
-        String output = "";
-        for (Map.Entry<String, CallbackReceiverPrx> entry : registeredClients.entrySet()) {
-            String clientHostName = entry.getKey();
-            output+=clientHostName + "\n";
-            // Puedes mostrar más detalles del cliente si es necesario
-            // Por ejemplo, puedes llamar a métodos en el cliente para obtener información adicional
+        List<String> keysList = new ArrayList<>(registeredClients.keySet());
+        StringBuilder result = new StringBuilder();
+
+        // Iterar a través de la lista y concatenar los elementos
+        for (String element : keysList) {
+            // Agregar el elemento actual a la cadena resultante
+            result.append(element).append("\n");
         }
-        return output;
+
+        return result.toString();
+    }
+
+    public static synchronized ArrayList<CallbackReceiverPrx> getCallbacks(){
+        return new ArrayList<>(registeredClients.values());
     }
 
 

@@ -7,12 +7,12 @@ Demo/_CallbackReceiverPrxI.java
  Demo._CallbackReceiverPrxI
 Demo/CallbackReceiverPrx.java
  Demo.CallbackReceiverPrx
-CallbackReceiverI.java
- CallbackReceiverI
-Demo/PrinterPrx.java
- Demo.PrinterPrx
 Demo/CallbackReceiver.java
  Demo.CallbackReceiver
  Demo.CallbackReceiver$1
+Demo/PrinterPrx.java
+ Demo.PrinterPrx
+CallbackReceiverI.java
+ CallbackReceiverI
 Client.java
  Client
