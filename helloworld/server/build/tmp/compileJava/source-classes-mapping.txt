@@ -5,16 +5,16 @@ Demo/_PrinterPrxI.java
  Demo._PrinterPrxI
 Demo/_CallbackReceiverPrxI.java
  Demo._CallbackReceiverPrxI
-Demo/CallbackReceiver.java
- Demo.CallbackReceiver
- Demo.CallbackReceiver$1
+PrinterI.java
+ PrinterI
 Demo/CallbackReceiverPrx.java
  Demo.CallbackReceiverPrx
 CallbackSenderI.java
  CallbackSenderI
-Demo/PrinterPrx.java
- Demo.PrinterPrx
-PrinterI.java
- PrinterI
 Server.java
  Server
+Demo/PrinterPrx.java
+ Demo.PrinterPrx
+Demo/CallbackReceiver.java
+ Demo.CallbackReceiver
+ Demo.CallbackReceiver$1

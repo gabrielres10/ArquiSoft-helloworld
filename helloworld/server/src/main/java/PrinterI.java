@@ -125,21 +125,26 @@ public class PrinterI implements Printer {
                 initiateCallback(destination, message, current);
               }
             }
-            return (destination == null || msg.split(":").length != 2)
+            return (msg.split(":").length != 2)
               ? "Tu mensaje debe ser similar a \"to X:\" donde el mensaje irá después de :"
-              : "";
+              : (destination == null)
+                ? "El cliente " + msg.split(" ")[1] + " no existe"
+                : "";
           default:
-            if(msg.startsWith("BC")){
+            if (msg.startsWith("BC")) {
               if (msg.split(":").length > 1) {
                 String message = msg.split(":")[1];
                 for (CallbackReceiverPrx callback : Server.getCallbacks()) {
                   initiateCallback(callback, message, current);
                 }
               }
-              return (msg.split(":").length < 1 || (msg.split(":").length < 1 && msg.split(" ").length > 1))
+              return (
+                  msg.split(":").length < 1 ||
+                  (msg.split(":").length < 1 && msg.split(" ").length > 1)
+                )
                 ? "Debes ingresar un mensaje después de BC: (recuerda separar el mensaje con \":\")"
                 : "";
-              }
+            }
             return ("Por favor ingresa un comando válido");
         }
       }
