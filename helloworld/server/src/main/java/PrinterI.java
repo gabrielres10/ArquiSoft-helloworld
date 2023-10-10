@@ -15,6 +15,7 @@ import java.util.concurrent.Future;
 public class PrinterI implements Printer {
 
   private ExecutorService threadPool = Executors.newCachedThreadPool();
+  private List<Long> latencies = new ArrayList<>();
 
   @Override
   public void unregisterClient(String hostName, com.zeroc.Ice.Current current) {
@@ -62,14 +63,31 @@ public class PrinterI implements Printer {
     final String finalMsg = msg;
     final String finalClientHN = clientHN;
 
-    System.out.println("[MENSAJE] - " + clientHN + ": " + msg + "\n");
+    System.out.println("\n [MENSAJE] - " + clientHN + ": " + msg + "\n");
+    long startTime = System.currentTimeMillis();
+    Server.totalRequestsReceived++;
 
     Future<String> resultFuture = threadPool.submit(() ->
       manageRequest(finalMsg, finalClientHN, current)
     );
     try {
-      return resultFuture.get(); // Espera hasta que la solicitud se haya procesado y obtiene el resultado
+      String result = resultFuture.get(); // Espera hasta que la solicitud se haya procesado y obtiene el resultado
+      Server.successfulRequestsProcessed++;
+      long endTime = System.currentTimeMillis();
+      long requestTime = endTime - startTime; // Tiempo que dura la operación
+      latencies.add(requestTime); // add new latency
+      Server.totalTime += requestTime;
+      Server.requestCount++;
+      System.out.println("Throughput (solicitudes por segundo): " + calculateThroughput()); //print the throughput
+      System.out.println("Tiempo de respuesta promedio (ms): " + (Server.totalTime / Server.requestCount)); //print the response time
+      System.out.println(calculateDeadline(requestTime));
+      System.out.println("Jitter de respuesta: " + calculateJitter(latencies) + " ms"); //print jitter of response
+      System.out.println("Tasa de pérdida (eventos perdidos por segundo): " + calculateLossRate());
+
+      return result;
     } catch (Exception exception) {
+      Server.unprocessedRequests++;
+      System.out.println("Evento no procesado. Tasa total de no procesamiento (por segundo): " + calculateUnprocessRate());
       exception.printStackTrace();
       return "Error al procesar la solicitud";
     }
@@ -83,13 +101,11 @@ public class PrinterI implements Printer {
     String command = "";
     if (msg.startsWith("!")) {
       command = msg.split("!")[1];
-      System.out.println("Consulta hecha por " + hostName + ":\n");
       return executeCommand(command); //return !custom command
     } else {
       try {
         int num = Integer.parseInt(msg);
         if (num > 0) {
-          System.out.println("Consulta hecha por " + hostName + ":\n");
           return printPrimes(num); //return prime number
         } else {
           return (
@@ -100,11 +116,9 @@ public class PrinterI implements Printer {
       } catch (NumberFormatException e) {
         switch (msg.split(" ")[0].toLowerCase()) {
           case "listifs":
-            System.out.println("Consulta hecha por " + hostName + ":\n");
             command = "ifconfig";
             return executeCommand(command);
           case "listports":
-            System.out.println("Consulta hecha por " + hostName + ":\n");
             command = "nmap " + msg.split(" ")[1];
             return executeCommand(command);
           case "exit":
@@ -116,10 +130,9 @@ public class PrinterI implements Printer {
           case "to":
             CallbackReceiverPrx destination = null;
             if (msg.split(" ").length > 1) {
-              System.out.println(msg.split(":").length);
               destination =
                 Server.getClient(msg.split(" ")[1].replace(":", ""));
-              System.out.println(destination);
+              //System.out.println(destination); //This section will allow to detect if a destination is being missprocessed
               if (destination != null && msg.split(":").length == 2) {
                 String message = hostName + ": " + msg.split(":")[1];
                 initiateCallback(destination, message, current);
@@ -200,4 +213,62 @@ public class PrinterI implements Printer {
 
     return output;
   }
+
+  private long calculateJitter(List<Long> latencies) {
+    if (latencies.size() < 2) {
+      return 0; // No hay suficientes latencias para calcular el jitter
+    }
+
+    // Calcular la desviación estándar de las latencias
+    double sumSquaredDifferences = 0;
+    long meanLatency = calculateMean(latencies);
+
+    for (long latency : latencies) {
+      long difference = latency - meanLatency;
+      sumSquaredDifferences += Math.pow(difference, 2);
+    }
+
+    double variance = sumSquaredDifferences / (latencies.size() - 1);
+    double jitter = Math.sqrt(variance);
+
+    return Math.round(jitter);
+  }
+
+  private long calculateMean(List<Long> latencies) {
+    long sum = 0;
+
+    for (long latency : latencies) {
+      sum += latency;
+    }
+
+    return sum / latencies.size();
+  }
+
+  private double calculateThroughput(){
+    return (double) Server.requestCount / ((double) Server.totalTime / 1000);
+  }
+
+  private double calculateUnprocessRate(){
+    return (double) Server.unprocessedRequests / ((double) Server.totalTime / 1000);
+  }
+
+  private String calculateDeadline(long requestTime){
+    String output = "";
+    long deadline = 5000; // stablish 5 seconds as limit time to respond
+    if (requestTime <= deadline) {
+      output = "Última solicitud procesada dentro del plazo de 5s: " + requestTime + "/" + deadline + " (ms)";
+    } else {
+      output = "La última solicitud excedió el plazo de 5s: " + requestTime + "/" + deadline + " (ms)";
+    }
+    return output;
+  }
+
+  private double calculateLossRate() {
+    if (Server.totalRequestsReceived == 0) {
+        return 0; // No se han recibido solicitudes, tasa de pérdida cero
+    }
+
+    return (double) (Server.totalRequestsReceived - Server.successfulRequestsProcessed) / ((double) Server.totalTime / 1000);
+  }
+  
 }

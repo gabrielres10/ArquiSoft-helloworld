@@ -7,6 +7,11 @@ import Demo.*;
 public class Server {
     private static int clientCount = 0;
     private static Map<String, CallbackReceiverPrx> registeredClients = new HashMap<>();
+    public static long requestCount = 0;
+    public static long totalTime = 0;
+    public static int totalRequestsReceived = 0;
+    public static int successfulRequestsProcessed = 0;
+    public static int unprocessedRequests = 0;
 
     public static void main(String[] args) {
         try (com.zeroc.Ice.Communicator communicator = com.zeroc.Ice.Util.initialize(args, "server.cfg")) {
@@ -40,13 +45,11 @@ public class Server {
 
    
     public static synchronized CallbackReceiverPrx getClient(String hostname) {
-        System.out.println("Por lo menos entra");
         String key = null;
         List<String> keysList = new ArrayList<>(registeredClients.keySet());
         for (String element : keysList) {
             // Agregar el elemento actual a la cadena resultante
             if(element.contains(hostname)){
-                System.out.println("Se ha encontrado a " + element);
                 key = element;
                 break;
             }
@@ -73,6 +76,6 @@ public class Server {
     public static synchronized ArrayList<CallbackReceiverPrx> getCallbacks(){
         return new ArrayList<>(registeredClients.values());
     }
-
+    
 
 }
