@@ -11,5 +11,14 @@ module Demo {
         void initiateCallback(CallbackReceiver* proxy, string msg);
         void shutdown();
     }
-    
+    interface ChatClient {
+        void receiveMessage(string msg);
+    }
+
+    interface ChatServer {
+        string sendMessage(string msg);
+        void registerClient(string hostname, ChatClient* proxy);
+        void unregisterClient(string hostname);
+        void shutdown();
+    }
 }
