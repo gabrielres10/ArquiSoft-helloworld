@@ -1,19 +1,19 @@
 <state>
-  <timestamp value='1731962719731' />
+  <timestamp value='1731963034464' />
   <sourceSet name='default'>
-    <source name='/mnt/2AC43937C439069B/Dell/Icesi/Semestre 8/Ciberseguridad/ArquiSoft-helloworld/helloworld/EncryptedChat.ice'>
-      <file name='/mnt/2AC43937C439069B/Dell/Icesi/Semestre 8/Ciberseguridad/ArquiSoft-helloworld/helloworld/client/build/generated-src/Demo/CallbackReceiver.java' />
-      <file name='/mnt/2AC43937C439069B/Dell/Icesi/Semestre 8/Ciberseguridad/ArquiSoft-helloworld/helloworld/client/build/generated-src/Demo/Printer.java' />
-      <file name='/mnt/2AC43937C439069B/Dell/Icesi/Semestre 8/Ciberseguridad/ArquiSoft-helloworld/helloworld/client/build/generated-src/Demo/ChatClient.java' />
-      <file name='/mnt/2AC43937C439069B/Dell/Icesi/Semestre 8/Ciberseguridad/ArquiSoft-helloworld/helloworld/client/build/generated-src/Demo/ChatServer.java' />
-      <file name='/mnt/2AC43937C439069B/Dell/Icesi/Semestre 8/Ciberseguridad/ArquiSoft-helloworld/helloworld/client/build/generated-src/Demo/CallbackReceiverPrx.java' />
-      <file name='/mnt/2AC43937C439069B/Dell/Icesi/Semestre 8/Ciberseguridad/ArquiSoft-helloworld/helloworld/client/build/generated-src/Demo/_CallbackReceiverPrxI.java' />
-      <file name='/mnt/2AC43937C439069B/Dell/Icesi/Semestre 8/Ciberseguridad/ArquiSoft-helloworld/helloworld/client/build/generated-src/Demo/PrinterPrx.java' />
-      <file name='/mnt/2AC43937C439069B/Dell/Icesi/Semestre 8/Ciberseguridad/ArquiSoft-helloworld/helloworld/client/build/generated-src/Demo/_PrinterPrxI.java' />
-      <file name='/mnt/2AC43937C439069B/Dell/Icesi/Semestre 8/Ciberseguridad/ArquiSoft-helloworld/helloworld/client/build/generated-src/Demo/ChatClientPrx.java' />
-      <file name='/mnt/2AC43937C439069B/Dell/Icesi/Semestre 8/Ciberseguridad/ArquiSoft-helloworld/helloworld/client/build/generated-src/Demo/_ChatClientPrxI.java' />
-      <file name='/mnt/2AC43937C439069B/Dell/Icesi/Semestre 8/Ciberseguridad/ArquiSoft-helloworld/helloworld/client/build/generated-src/Demo/ChatServerPrx.java' />
-      <file name='/mnt/2AC43937C439069B/Dell/Icesi/Semestre 8/Ciberseguridad/ArquiSoft-helloworld/helloworld/client/build/generated-src/Demo/_ChatServerPrxI.java' />
+    <source name='/mnt/2AC43937C439069B/Dell/Icesi/Semestre 8/Ciberseguridad/ArquiSoft-helloworld/encrypted-chat/EncryptedChat.ice'>
+      <file name='/mnt/2AC43937C439069B/Dell/Icesi/Semestre 8/Ciberseguridad/ArquiSoft-helloworld/encrypted-chat/client/build/generated-src/Demo/CallbackReceiver.java' />
+      <file name='/mnt/2AC43937C439069B/Dell/Icesi/Semestre 8/Ciberseguridad/ArquiSoft-helloworld/encrypted-chat/client/build/generated-src/Demo/Printer.java' />
+      <file name='/mnt/2AC43937C439069B/Dell/Icesi/Semestre 8/Ciberseguridad/ArquiSoft-helloworld/encrypted-chat/client/build/generated-src/Demo/ChatClient.java' />
+      <file name='/mnt/2AC43937C439069B/Dell/Icesi/Semestre 8/Ciberseguridad/ArquiSoft-helloworld/encrypted-chat/client/build/generated-src/Demo/ChatServer.java' />
+      <file name='/mnt/2AC43937C439069B/Dell/Icesi/Semestre 8/Ciberseguridad/ArquiSoft-helloworld/encrypted-chat/client/build/generated-src/Demo/CallbackReceiverPrx.java' />
+      <file name='/mnt/2AC43937C439069B/Dell/Icesi/Semestre 8/Ciberseguridad/ArquiSoft-helloworld/encrypted-chat/client/build/generated-src/Demo/_CallbackReceiverPrxI.java' />
+      <file name='/mnt/2AC43937C439069B/Dell/Icesi/Semestre 8/Ciberseguridad/ArquiSoft-helloworld/encrypted-chat/client/build/generated-src/Demo/PrinterPrx.java' />
+      <file name='/mnt/2AC43937C439069B/Dell/Icesi/Semestre 8/Ciberseguridad/ArquiSoft-helloworld/encrypted-chat/client/build/generated-src/Demo/_PrinterPrxI.java' />
+      <file name='/mnt/2AC43937C439069B/Dell/Icesi/Semestre 8/Ciberseguridad/ArquiSoft-helloworld/encrypted-chat/client/build/generated-src/Demo/ChatClientPrx.java' />
+      <file name='/mnt/2AC43937C439069B/Dell/Icesi/Semestre 8/Ciberseguridad/ArquiSoft-helloworld/encrypted-chat/client/build/generated-src/Demo/_ChatClientPrxI.java' />
+      <file name='/mnt/2AC43937C439069B/Dell/Icesi/Semestre 8/Ciberseguridad/ArquiSoft-helloworld/encrypted-chat/client/build/generated-src/Demo/ChatServerPrx.java' />
+      <file name='/mnt/2AC43937C439069B/Dell/Icesi/Semestre 8/Ciberseguridad/ArquiSoft-helloworld/encrypted-chat/client/build/generated-src/Demo/_ChatServerPrxI.java' />
     </source>
     <arg value='/usr/bin/slice2java' />
     <arg value='-I/usr/share/ice/slice' />
